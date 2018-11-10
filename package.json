@@ -1,0 +1,9 @@
+{
+    "name": "Mon Chat",
+    "version": "0.1.0",
+    "dependencies": {
+        "ejs": "^2.6.1",
+        "express": "^4.16.4"
+    },
+    "author": "brice boudehent"
+}

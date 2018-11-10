@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Super Chat</title>
+    <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+    <div id='all'>
+        <div class="titre">Ici c'est mon super chat</div>
+        <form action="/" method="post" id="myForm">
+            <input type="text" id="textMessage">
+            <button type="submit" id="send">Send message</button>
+        </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://localhost:8080');
+        var pseudo = prompt('Quel est votre pseudo ?');
+
+        socket.emit('petit_nouveau', pseudo);
+        socket.on('message', function (message) {
+            console.log('Le serveur dit : ' + message);
+        })
+
+        socket.on('addMessage', function (post, pseudo) {
+            var newMessage = document.createElement('div');
+            newMessage.innerHTML = pseudo + " dit : " + post;
+            document.getElementById('all').appendChild(newMessage);
+        });
+
+        socket.on('newConnection', function (pseudo) {
+            var newConnectionsMessage = document.createElement('div');
+            newConnectionsMessage.innerHTML = pseudo + " just logged in.";
+            document.getElementById('all').appendChild(newConnectionsMessage);
+        });
+
+        document.getElementById('myForm').addEventListener('submit', function () {
+            event.preventDefault();
+            return false;
+        });
+
+        document.getElementById('send').addEventListener('click', function () {
+            var newPost = document.getElementById('textMessage');
+            socket.emit('newPost', newPost.value, pseudo);
+            console.log(newPost.value);
+            var myNewMessage = document.createElement('div');
+            myNewMessage.innerHTML = pseudo + " dit : " + newPost.value;
+            document.getElementById('all').appendChild(myNewMessage);
+            newPost.value = "";
+        });
+    </script>
+</body>
+
+</html>

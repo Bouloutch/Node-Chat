@@ -1,0 +1,18 @@
+<div>Hello vous êtes sur ma page</div>
+<button type="button" id="wizz">WIZZ</button>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://localhost:8080');
+    var pseudo = prompt('Quel est votre pseudo ?');
+
+    socket.emit('petit_nouveau', pseudo);
+    socket.on('message', function(message) {
+        alert('Le serveur dit : ' + message);
+    })
+
+    document.getElementById('wizz').addEventListener('click', function() {
+        socket.emit('message', 'Salut serveur');
+        alert('Someone clicked!');
+    });
+</script>
